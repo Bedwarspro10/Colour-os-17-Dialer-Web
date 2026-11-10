@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08090d">
+<title>Something Special</title>
+<style>
+:root{color-scheme:dark;--bg:#08090d;--fg:#f5f6fa;--muted:#969aa8;--green:#baff83}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--fg);background:radial-gradient(ellipse at 50% 42%,#344b402e,transparent 48%),radial-gradient(ellipse at 12% 90%,#45537020,transparent 40%),var(--bg);-webkit-font-smoothing:antialiased}
+.noise{position:fixed;inset:0;pointer-events:none;z-index:8;opacity:.1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E")}
+.ambient{position:fixed;width:520px;height:520px;border-radius:50%;filter:blur(110px);opacity:.12;background:#9ce86d;left:50%;top:46%;transform:translate(-50%,-50%)}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:34px 22px;transition:opacity .7s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+#intro{z-index:2}.topline{position:absolute;top:32px;left:5vw;right:5vw;display:flex;justify-content:space-between;align-items:center;color:#aeb2bd;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.brand{font-weight:800;color:#e7e9ee;letter-spacing:.24em}.status{display:flex;align-items:center;gap:9px}.status:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 13px var(--green)}
+.hero{width:min(100%,1060px);text-align:center}.eyebrow{margin:0 0 19px;color:var(--green);font-size:10px;letter-spacing:.34em;text-transform:uppercase;font-weight:800}
+h1{margin:0 0 29px;font-size:clamp(30px,5vw,56px);font-weight:580;letter-spacing:-.055em;line-height:1.04}
+.video-shell{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:22px;background:#11141a;border:1px solid #ffffff22;box-shadow:0 28px 100px #0009,0 0 0 7px #ffffff05}
+video{width:100%;height:100%;display:block;object-fit:contain;background:#050608}.video-fallback{position:absolute;inset:0;display:grid;place-items:center;color:#9298a5;font-size:13px;pointer-events:none}
+.cta-wrap{min-height:88px;display:flex;justify-content:center;align-items:center;opacity:0;transform:translateY(18px);filter:blur(8px);transition:opacity .9s ease,transform .9s cubic-bezier(.16,1,.3,1),filter .9s ease}
+.cta-wrap.visible{opacity:1;transform:none;filter:blur(0)}
+.primary{border:0;border-radius:999px;padding:16px 29px;color:#10150d;background:linear-gradient(135deg,#c7ff8c,#8fe0a5);font-size:13px;font-weight:850;letter-spacing:.07em;cursor:pointer;box-shadow:0 8px 34px #9aee7033,inset 0 1px #ffffffa6;transition:transform .25s,box-shadow .25s}
+.primary:hover{transform:translateY(-3px);box-shadow:0 14px 42px #9aee704d}.primary:active{transform:scale(.96)}
+.hint{color:#737987;font-size:11px;letter-spacing:.08em}.footer{position:absolute;bottom:24px;color:#646a77;font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+#particles{position:fixed;inset:0;z-index:10;pointer-events:none;display:none}
+#final{z-index:1;opacity:0;visibility:hidden;transform:scale(.97);pointer-events:none}
+#final.show{opacity:1;visibility:visible;transform:scale(1);pointer-events:auto}
+.card{width:min(100%,570px);text-align:center}.mark{width:66px;height:66px;margin:0 auto 27px;border-radius:22px;display:grid;place-items:center;color:var(--green);border:1px solid #bcff933b;background:linear-gradient(145deg,#b5ff8621,#ffffff08);box-shadow:0 0 55px #a7f06a1a;animation:markIn .8s cubic-bezier(.16,1,.3,1) both}
+.mark svg{width:27px;height:27px}h2{margin:0 0 13px;font-size:clamp(38px,7vw,66px);letter-spacing:-.065em;font-weight:600}
+.card p:not(.eyebrow){margin:0 auto 31px;max-width:390px;color:var(--muted);font-size:14px;line-height:1.75}
+.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}.action{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:175px;padding:15px 21px;border-radius:999px;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.04em;transition:transform .25s}
+.action:hover{transform:translateY(-3px)}.action svg{width:16px;height:16px}.download{color:#10150d;background:linear-gradient(135deg,#c7ff8c,#8fe0a5)}.telegram{color:#edf0f5;background:#ffffff0e;border:1px solid #ffffff24}
+.note{margin-top:35px;color:#626977;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+@keyframes markIn{from{opacity:0;transform:translateY(14px) scale(.8) rotate(-8deg)}to{opacity:1;transform:none}}
+@media(max-width:600px){.topline{top:19px;font-size:8px}.screen{padding:26px 16px}.video-shell{border-radius:14px}h1{margin-bottom:23px}.footer{bottom:14px;font-size:8px}.actions{flex-direction:column;align-items:stretch}.action{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="ambient"></div><div class="noise"></div>
+<main id="intro" class="screen">
+ <div class="topline"><div class="brand">YOUR BRAND</div><div class="status">A little something for you</div></div>
+ <section class="hero">
+  <p class="eyebrow">An experience worth the wait</p>
+  <h1>Take a moment.<br>Watch what happens.</h1>
+  <div class="video-shell"><div class="video-fallback" id="fallback">Loading video…</div><video id="video" src="video.mp4" autoplay muted playsinline preload="auto"></video></div>
+  <div class="cta-wrap" id="cta"><button class="primary" id="continue" type="button">CONTINUE <span aria-hidden="true">↗</span></button></div>
+  <div class="hint" id="hint">The next part is just one click away.</div>
+ </section>
+ <div class="footer">A thoughtfully crafted experience</div>
+</main>
+<canvas id="particles"></canvas>
+<section id="final" class="screen" aria-hidden="true">
+ <div class="topline"><div class="brand">YOUR BRAND</div><div class="status">You're all set</div></div>
+ <div class="card">
+  <div class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12.5 4.4 4.2L19.5 6.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <p class="eyebrow">The wait is over</p><h2>It's yours.</h2>
+  <p>Your download is ready. Get the file below, and join the Telegram channel for updates, releases and more.</p>
+  <div class="actions">
+   <a class="action download" id="download" href="download.zip" download><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 19.5h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>DOWNLOAD NOW</a>
+   <a class="action telegram" href="https://t.me/+ESE1emLOSFA2Yzk1" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.7 4.3 18.5 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L6 13.6 1.1 12c-1.1-.3-1.1-1 .2-1.5L20.4 3c.9-.3 1.6.2 1.3 1.3Z"/></svg>JOIN TELEGRAM</a>
+  </div><div class="note">Thank you for being here</div>
+ </div>
+</section>
+<script>
+/* Put the downloadable file in this folder and change this filename if needed. */
+const DOWNLOAD_FILE="download.zip";
+const video=document.getElementById("video"),fallback=document.getElementById("fallback");
+const cta=document.getElementById("cta"),intro=document.getElementById("intro");
+const finalScreen=document.getElementById("final"),canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");let revealTimer=null,done=false;
+document.getElementById("download").href=DOWNLOAD_FILE;
+video.addEventListener("loadeddata",()=>fallback.style.display="none");
+video.addEventListener("error",()=>{fallback.textContent="Video not found. Place video.mp4 beside index.html.";fallback.style.display="grid"});
+video.addEventListener("ended",()=>{if(revealTimer||done)return;revealTimer=setTimeout(()=>{cta.classList.add("visible");document.getElementById("hint").textContent="Ready when you are.";},3000)});
+video.play().catch(()=>{fallback.textContent="Tap the video to play";fallback.style.display="grid";video.controls=true});
+
+function dissolve(){
+ if(done)return;done=true;
+ const w=innerWidth,h=innerHeight,dpr=Math.min(devicePixelRatio||1,2);
+ canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.width=w+"px";canvas.style.height=h+"px";canvas.style.display="block";ctx.setTransform(dpr,0,0,dpr,0,0);
+ /* Render the current intro as a pixel field, including the current video frame. */
+ const scale=Math.min(1,1000/w),sw=Math.floor(w*scale),sh=Math.floor(h*scale);
+ const shot=document.createElement("canvas");shot.width=sw;shot.height=sh;
+ const s=shot.getContext("2d",{willReadFrequently:true});
+ const grad=s.createLinearGradient(0,0,sw,sh);grad.addColorStop(0,"#101a15");grad.addColorStop(1,"#08090d");s.fillStyle=grad;s.fillRect(0,0,sw,sh);
+ s.fillStyle="#baff83";s.font=`bold ${Math.max(8,10*scale)}px sans-serif`;s.fillText("AN EXPERIENCE WORTH THE WAIT",sw*.08,sh*.22);
+ s.fillStyle="#f5f6fa";s.font=`600 ${Math.max(20,43*scale)}px sans-serif`;s.fillText("Take a moment.",sw*.08,sh*.31);s.fillText("Watch what happens.",sw*.08,sh*.38);
+ const vw=sw*.82,vh=vw*9/16,vx=(sw-vw)/2,vy=sh*.43;
+ try{s.drawImage(video,vx,vy,vw,Math.min(vh,sh-vy));}catch(e){}
+ const pixels=s.getImageData(0,0,sw,sh).data,parts=[],step=3;
+ for(let y=0;y<sh;y+=step)for(let x=0;x<sw;x+=step){const i=(y*sw+x)*4;if(pixels[i+3]<20)continue;parts.push({x:x/scale,y:y/scale,vx:(Math.random()-.35)*5,vy:-Math.random()*5-0.5,size:(Math.random()*2+1)/scale,a:1,fade:Math.random()*.018+.012,r:pixels[i],g:pixels[i+1],b:pixels[i+2]})}
+ intro.style.opacity="0";intro.style.transform="scale(.985)";intro.style.pointerEvents="none";
+ const start=performance.now();
+ function frame(now){ctx.clearRect(0,0,w,h);for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=.035;p.vx*=1.005;p.a-=p.fade;if(p.a<=0)continue;ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},${p.a})`;ctx.fillRect(p.x,p.y,p.size,p.size)}
+ if(now-start<1250)requestAnimationFrame(frame);else{canvas.style.display="none";finalScreen.classList.add("show");finalScreen.setAttribute("aria-hidden","false")}}
+ requestAnimationFrame(frame);
+}
+document.getElementById("continue").addEventListener("click",dissolve);
+</script>
+</body>
+</html>
